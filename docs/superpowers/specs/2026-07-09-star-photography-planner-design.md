@@ -1,272 +1,270 @@
-# Star Photography Planner Design
+# 별 사진 촬영지 추천 서비스 설계
 
-## Summary
+## 요약
 
-Build a responsive web app that recommends the best dates and places for star photography worldwide. The service uses moon conditions, weather, dark-sky quality, night length, and optional Milky Way visibility to answer planning questions such as:
-
-> In April 2026, when and where should I go in New Zealand to photograph stars?
-
-The first version should prioritize product structure and recommendation quality over final visual styling. Detailed visual design, palette, spacing, and component polish will be handled in a later design pass.
-
-## Product Direction
-
-The app should feel like an interactive globe-based observatory, not a form-driven travel search page. The 3D Earth is the main canvas on the first screen. Users can either type a natural-language prompt or explore directly by moving the globe.
-
-Both interaction modes update the same recommendation state:
-
-- Typing "April 2026 New Zealand star photography" moves the globe to New Zealand and evaluates candidate dates and locations.
-- Rotating, zooming, or tapping the globe updates the selected region and refreshes recommendations.
-- Scrubbing dates changes the highlighted places and score layers on the globe.
-- Toggling layers shows moon impact, cloud risk, dark-sky quality, and Milky Way suitability.
-
-The product should support both planning and execution:
-
-- For future trips beyond reliable forecast windows, recommendations use moon calculations, astronomical darkness, seasonal climate, light pollution, and candidate site quality.
-- For near-term trips, recommendations also use current weather forecasts and show higher-confidence execution guidance.
-
-## MVP Scope
-
-The MVP is a responsive web app. It supports desktop planning and mobile checking, but native mobile apps are out of scope.
-
-The app should cover the world without scanning every coordinate globally. It uses a hybrid candidate model:
-
-- A curated database of known or likely astrophotography destinations.
-- Limited grid scanning around a user-selected or searched region.
-- Ranking across places and dates within the requested travel window.
-
-The MVP must answer the representative query:
+전 세계를 대상으로 별 사진 촬영에 가장 좋은 날짜와 장소를 추천하는 반응형 웹 앱을 만든다. 이 서비스는 달 조건, 날씨, 어두운 하늘 조건, 실제 밤의 길이, 선택적인 은하수 적합도를 함께 사용해 다음과 같은 계획 질문에 답한다.
 
 > 2026년 4월 뉴질랜드에서 별 사진을 찍으려면 언제 어디가 좋아?
 
-The result should include:
+첫 버전은 최종 비주얼 디자인보다 제품 구조와 추천 품질을 우선한다. 색감, 간격, 컴포넌트 스타일, 세부 레이아웃 같은 디자인 결정은 이후 디자인 단계에서 다룬다.
 
-- Recommended date windows.
-- Recommended locations.
-- Overall score.
-- Factor scores.
-- Explanation of why the recommendation is good.
-- Risks and caveats.
-- Confidence level.
+## 제품 방향
 
-## Core User Experience
+앱은 단순한 여행 검색 폼이 아니라, 인터랙티브한 지구 기반 관측 도구처럼 느껴져야 한다. 첫 화면의 중심은 3D 지구이며, 사용자는 자연어 프롬프트를 입력하거나 지구를 직접 움직이며 탐색할 수 있다.
 
-The first screen is a full globe canvas with lightweight overlays:
+두 입력 방식은 같은 추천 상태를 갱신한다.
 
-- Prompt input at the top or as a floating command surface.
-- Recommendation summary card that appears after a prompt or region selection.
-- Date scrubber for evaluating nearby nights.
-- Layer controls for moon, weather, dark sky, and Milky Way suitability.
-- Highlighted candidate zones and selected locations on the globe.
+- 사용자가 "2026년 4월 뉴질랜드 별 사진"처럼 입력하면 지구가 뉴질랜드로 이동하고 후보 날짜와 장소를 평가한다.
+- 사용자가 지구를 회전, 줌, 탭하면 선택 지역이 바뀌고 추천 결과가 갱신된다.
+- 날짜를 스크러빙하면 지구 위의 추천 장소와 점수 레이어가 바뀐다.
+- 레이어를 전환하면 달 영향, 구름 리스크, 어두운 하늘 품질, 은하수 적합도를 볼 수 있다.
 
-The globe remains interactive while results are visible. The recommendation UI must not turn the globe into passive decoration.
+제품은 계획 단계와 실행 직전 단계를 모두 지원해야 한다.
 
-## Architecture
+- 신뢰할 수 있는 예보 범위를 벗어난 미래 여행은 달 계산, 천문학적 어둠, 계절 기후, 광공해, 후보지 품질로 추천한다.
+- 가까운 날짜의 촬영 계획은 최신 날씨 예보를 추가로 반영하고 더 높은 신뢰도의 실행 추천으로 보여준다.
 
-The system is split into five modules.
+## MVP 범위
 
-### Globe Experience
+MVP는 반응형 웹 앱이다. 데스크톱에서 여행 계획을 세우고 모바일에서 현장 확인을 할 수 있게 만들되, 네이티브 모바일 앱은 범위에서 제외한다.
 
-Renders the 3D Earth and all spatial interaction. It owns:
+앱은 전 세계를 다루지만 모든 좌표를 무제한으로 스캔하지 않는다. 대신 혼합 후보 모델을 사용한다.
 
-- Three.js globe scene.
-- Camera movement and region focus.
-- Candidate pins and highlighted zones.
-- Data layers for moon impact, cloud risk, dark-sky quality, and Milky Way suitability.
-- Date scrubber interaction.
+- 알려진 별 사진 명소 또는 잠재 촬영지 데이터베이스.
+- 사용자가 검색하거나 선택한 지역 주변의 제한적 격자 스캔.
+- 요청된 여행 기간 안에서 장소와 날짜를 함께 랭킹한다.
 
-### Intent and Region Resolver
+MVP는 대표적으로 다음 질문에 답할 수 있어야 한다.
 
-Turns natural language and direct globe selections into a normalized recommendation request.
+> 2026년 4월 뉴질랜드에서 별 사진을 찍으려면 언제 어디가 좋아?
 
-Inputs can include:
+결과에는 다음 정보가 포함된다.
 
-- Region, country, city, landmark, or selected globe area.
-- Travel month, date range, or specific night.
-- Photography target, such as general stars or Milky Way.
-- Optional movement radius.
+- 추천 날짜 구간.
+- 추천 장소.
+- 종합 점수.
+- 조건별 점수.
+- 왜 좋은 추천인지에 대한 설명.
+- 리스크와 주의점.
+- 신뢰도.
 
-MVP implementation can begin with rules plus geocoding. LLM-based parsing can be added later if needed.
+## 핵심 사용자 경험
 
-### Candidate Location Engine
+첫 화면은 가벼운 오버레이를 얹은 전체 3D 지구 캔버스다.
 
-Builds the list of places to evaluate.
+- 상단 또는 플로팅 명령 영역의 프롬프트 입력.
+- 프롬프트 입력 또는 지역 선택 후 나타나는 추천 요약 카드.
+- 근처 밤들을 평가하는 날짜 스크러버.
+- 달, 날씨, 어두운 하늘, 은하수 적합도 레이어 컨트롤.
+- 지구 위에 표시되는 후보 지역과 선택 장소.
 
-It first checks the curated astrophotography candidate database. If the user selects an arbitrary region, it performs a limited local grid scan around that area. This avoids expensive global weather API scans while preserving the feeling of worldwide coverage.
+결과가 보이는 동안에도 지구는 계속 조작 가능해야 한다. 추천 UI가 지구를 단순 장식으로 만들면 안 된다.
 
-### Sky and Weather Scoring Engine
+## 아키텍처
 
-Computes date and place scores from astronomical, weather, dark-sky, and confidence inputs.
+시스템은 다섯 개의 모듈로 나눈다.
 
-The scoring engine must expose factor scores, not only a single ranking. This makes recommendations explainable and debuggable.
+### 지구 경험 모듈
 
-### Data Provider Layer
+3D 지구와 모든 공간적 상호작용을 렌더링한다. 이 모듈은 다음을 담당한다.
 
-Wraps external and computed data sources.
+- Three.js 기반 지구 장면.
+- 카메라 이동과 지역 포커싱.
+- 후보지 핀과 강조 지역.
+- 달 영향, 구름 리스크, 어두운 하늘 품질, 은하수 적합도 데이터 레이어.
+- 날짜 스크러버 상호작용.
 
-Expected provider categories:
+### 의도 및 지역 해석 모듈
 
-- Astronomical calculations for moon phase, moonrise, moonset, astronomical twilight, and Milky Way visibility.
-- Weather forecast APIs for near-term cloud, precipitation, humidity, and visibility.
-- Climate or historical weather data for future planning outside reliable forecast windows.
-- Light pollution data from static or periodically refreshed datasets.
-- Geocoding and place lookup.
+자연어 입력과 지구 선택을 정규화된 추천 요청으로 변환한다.
 
-This layer owns caching, rate limiting, retry behavior, and provider-specific normalization.
+입력은 다음을 포함할 수 있다.
 
-## Data Flow
+- 지역, 국가, 도시, 랜드마크, 또는 지구에서 선택한 영역.
+- 여행 월, 날짜 범위, 특정 밤.
+- 일반 별 사진 또는 은하수 같은 촬영 대상.
+- 선택적인 이동 반경.
 
-1. User enters a prompt, moves the globe, taps a region, or adjusts dates.
-2. The app creates a normalized recommendation request.
-3. The candidate engine selects known locations and optionally scans a limited grid near the chosen region.
-4. The data provider layer gathers astronomy, weather, climate, and light pollution inputs.
-5. The scoring engine ranks each location-night pair.
-6. The UI updates the globe highlights, layers, recommendation card, and date scrubber from the same result state.
+MVP는 규칙 기반 파싱과 지오코딩으로 시작할 수 있다. 필요하면 이후 LLM 기반 파싱을 추가한다.
 
-## Recommendation Model
+### 후보 장소 엔진
 
-The MVP scoring formula is:
+평가할 장소 목록을 만든다.
 
-`shooting suitability = moon score + weather score + dark-sky score + night-window score + Milky Way bonus - risk penalties`
+먼저 별 사진 후보지 데이터베이스를 조회한다. 사용자가 임의 지역을 선택하면 그 주변에서 제한적 로컬 격자 스캔을 수행한다. 이렇게 하면 전 세계 날씨 API를 비싸게 스캔하지 않으면서도 전 세계 서비스를 쓰는 느낌을 유지할 수 있다.
 
-### Moon Score
+### 하늘 및 날씨 점수 엔진
 
-Measures how favorable the moon is for dark-sky photography.
+천문, 날씨, 어두운 하늘, 신뢰도 입력을 바탕으로 날짜와 장소 점수를 계산한다.
 
-Inputs:
+점수 엔진은 단일 랭킹뿐 아니라 조건별 점수도 노출해야 한다. 그래야 추천 결과가 설명 가능하고 디버깅 가능해진다.
 
-- Moon phase.
-- Moon illumination.
-- Moonrise and moonset times.
-- Whether moonlight overlaps the useful dark window.
+### 데이터 제공자 계층
 
-### Weather Score
+외부 데이터와 계산 데이터를 감싸는 계층이다.
 
-Measures whether the sky is likely to be usable.
+예상 제공자 범주는 다음과 같다.
 
-Inputs:
+- 달 위상, 월출, 월몰, 천문박명, 은하수 가시성 계산.
+- 가까운 날짜의 구름, 강수, 습도, 시정 예보 API.
+- 신뢰 가능한 예보 범위를 벗어난 미래 계획을 위한 기후 또는 과거 날씨 데이터.
+- 정적 또는 주기적으로 갱신되는 광공해 데이터.
+- 지오코딩과 장소 조회.
 
-- Cloud cover.
-- Precipitation.
-- Humidity.
-- Visibility.
+이 계층은 캐싱, 호출 제한, 재시도, 제공자별 데이터 정규화를 담당한다.
 
-Near-term recommendations use forecast data. Future planning recommendations use climate or historical patterns and must show lower confidence.
+## 데이터 흐름
 
-### Dark-Sky Score
+1. 사용자가 프롬프트를 입력하거나, 지구를 움직이거나, 지역을 탭하거나, 날짜를 조정한다.
+2. 앱은 정규화된 추천 요청을 만든다.
+3. 후보지 엔진은 알려진 장소를 선택하고, 필요하면 선택 지역 근처에서 제한적 격자 스캔을 수행한다.
+4. 데이터 제공자 계층은 천문, 날씨, 기후, 광공해 입력을 모은다.
+5. 점수 엔진은 각 장소와 밤의 조합을 랭킹한다.
+6. UI는 같은 결과 상태를 바탕으로 지구 강조, 레이어, 추천 카드, 날짜 스크러버를 함께 갱신한다.
 
-Measures ambient sky darkness.
+## 추천 모델
 
-Inputs:
+MVP 점수 공식은 다음과 같다.
 
-- Light pollution estimate.
-- Distance from major cities.
-- Site elevation when available.
+`촬영 적합도 = 달 점수 + 날씨 점수 + 어두운 하늘 점수 + 밤 시간 점수 + 은하수 보너스 - 리스크 페널티`
 
-Low-resolution data must be marked as an estimate.
+### 달 점수
 
-### Night-Window Score
+별 사진 촬영에 달 조건이 얼마나 유리한지 측정한다.
 
-Measures whether there is enough true darkness.
+입력:
 
-Inputs:
+- 달 위상.
+- 달 밝기.
+- 월출과 월몰 시간.
+- 달빛이 실제 촬영 가능한 어두운 시간과 겹치는지 여부.
 
-- Astronomical twilight times.
-- Length of the dark window.
-- Local season and latitude.
+### 날씨 점수
 
-### Milky Way Bonus
+하늘을 실제로 사용할 수 있을 가능성을 측정한다.
 
-Adds value when the Milky Way core or desired galactic feature is visible during the useful dark window.
+입력:
 
-The app should still support general star photography when Milky Way conditions are weak.
+- 구름량.
+- 강수.
+- 습도.
+- 시정.
 
-### Confidence
+가까운 날짜는 예보 데이터를 사용한다. 미래 계획은 기후 또는 과거 패턴을 사용하고 더 낮은 신뢰도로 표시해야 한다.
 
-Confidence is separate from suitability. A night can have high theoretical suitability but low confidence if weather is based only on climate statistics.
+### 어두운 하늘 점수
 
-Confidence levels:
+주변 하늘이 얼마나 어두운지 측정한다.
 
-- High: near-term forecast available and fresh.
-- Medium: forecast available but farther out or partially uncertain.
-- Low: planning recommendation based on astronomy, climate, and static data.
+입력:
 
-## Failure Handling
+- 광공해 추정치.
+- 주요 도시와의 거리.
+- 사용할 수 있는 경우 장소 고도.
 
-The app should degrade gracefully.
+해상도가 낮은 데이터는 추정치로 표시해야 한다.
 
-- If weather forecast data is unavailable, use climate or historical weather fallback and show lower confidence.
-- If light pollution data is coarse, show the dark-sky score as an estimate.
-- If a geocoding query is ambiguous, ask the user to choose among likely regions.
-- If API limits are reached, use cached data and clearly mark stale or fallback results.
-- If the scoring engine has insufficient data for a candidate, exclude that candidate or rank it with a visible data-quality warning.
+### 밤 시간 점수
 
-The app must avoid presenting long-range weather as certain. Future travel planning should be described as probability-based guidance.
+충분한 실제 어둠이 있는지 측정한다.
 
-## API and Data Cost Strategy
+입력:
 
-The product should not perform unrestricted global grid scans through live weather APIs. That would create cost, latency, and rate-limit risk.
+- 천문박명 시간.
+- 어두운 시간의 길이.
+- 현지 계절과 위도.
 
-Instead:
+### 은하수 보너스
 
-- Use a curated candidate database for common astrophotography destinations.
-- Run limited grid scans only around the searched or selected region.
-- Cache provider results by location, time window, and data type.
-- Prefer computed astronomy data where possible because it is stable and inexpensive.
-- Use static or periodically refreshed light pollution data rather than per-request API calls.
-- Separate near-term forecast requests from long-range planning requests.
+은하수 중심부 또는 원하는 은하 구조가 실제 어두운 시간에 보이면 가산점을 준다.
 
-Provider choices can be finalized during implementation, but the architecture must keep providers swappable.
+은하수 조건이 약한 날에도 일반 별 사진 추천은 계속 지원해야 한다.
 
-## Testing Strategy
+### 신뢰도
 
-### Astronomy Tests
+신뢰도는 촬영 적합도와 분리한다. 어떤 밤은 이론적 촬영 적합도가 높아도 날씨가 기후 통계에만 기반하면 신뢰도는 낮을 수 있다.
 
-Verify moon phase, moonrise, moonset, and astronomical twilight calculations across time zones, hemispheres, and high-latitude edge cases.
+신뢰도 단계:
 
-### Scoring Tests
+- 높음: 최신 근거리 예보가 있다.
+- 중간: 예보는 있으나 기간이 멀거나 일부 불확실하다.
+- 낮음: 천문, 기후, 정적 데이터 기반의 계획 추천이다.
 
-Use fixture locations and dates to prove that:
+## 실패 처리
 
-- Better moon conditions improve ranking.
-- Poor cloud or precipitation conditions lower ranking.
-- Darker locations outrank light-polluted locations when other factors are similar.
-- Confidence changes correctly between forecast-backed and climate-backed recommendations.
+앱은 데이터 문제가 생겨도 자연스럽게 성능을 낮춰 동작해야 한다.
 
-### UI State Tests
+- 날씨 예보 데이터를 사용할 수 없으면 기후 또는 과거 날씨 기반 대체 데이터를 사용하고 신뢰도를 낮춘다.
+- 광공해 데이터가 거칠면 어두운 하늘 점수를 추정치로 표시한다.
+- 지오코딩 결과가 애매하면 가능한 지역 후보 중에서 사용자가 선택하게 한다.
+- API 호출 제한에 도달하면 캐시 데이터를 사용하고 오래된 데이터 또는 대체 결과임을 명확히 표시한다.
+- 점수 엔진이 후보지를 평가하기에 데이터가 부족하면 해당 후보를 제외하거나 데이터 품질 경고를 붙여 낮은 신뢰도로 랭킹한다.
 
-Verify that prompt input, globe selection, date scrubbing, and layer toggles update the same recommendation state.
+앱은 장기 날씨를 확정적인 예보처럼 보여주면 안 된다. 미래 여행 계획은 확률 기반 가이드로 설명해야 한다.
 
-### Provider Tests
+## API와 데이터 비용 전략
 
-Mock weather, geocoding, and light pollution providers to test retries, caching, API failure, stale data, and fallback paths.
+제품은 실시간 날씨 API로 전 세계 격자를 무제한 스캔하지 않는다. 그렇게 하면 비용, 지연 시간, 호출 제한 리스크가 커진다.
 
-## Out of Scope for MVP
+대신 다음 전략을 사용한다.
 
-- Final visual design system.
-- Native mobile app.
-- User accounts.
-- Trip itinerary booking.
-- Social sharing.
-- Advanced route planning.
-- Guaranteed cloud-free predictions.
+- 자주 찾는 별 사진 여행지에 대해 후보지 데이터베이스를 사용한다.
+- 검색 또는 선택된 지역 주변에서만 제한적 격자 스캔을 실행한다.
+- 위치, 기간, 데이터 유형별로 제공자 결과를 캐시한다.
+- 천문 데이터는 안정적이고 저렴하므로 가능한 계산 기반으로 처리한다.
+- 광공해 데이터는 요청마다 API를 호출하기보다 정적 또는 주기 갱신 데이터로 처리한다.
+- 근거리 예보 요청과 장기 계획 요청을 분리한다.
 
-## Open Implementation Decisions
+구체적인 제공자는 구현 단계에서 확정할 수 있지만, 아키텍처는 제공자를 교체할 수 있게 유지해야 한다.
 
-These should be decided during implementation planning:
+## 테스트 전략
 
-- Exact frontend framework.
-- Exact astronomy library.
-- Weather and climate provider selection.
-- Initial curated destination dataset format.
-- Whether the first build uses a backend API, serverless functions, or a local prototype API.
+### 천문 계산 테스트
 
-## Approval Status
+시간대, 남북반구, 고위도 경계 사례를 포함해 달 위상, 월출, 월몰, 천문박명 계산이 안정적인지 검증한다.
 
-Approved decisions:
+### 점수 테스트
 
-- Use a 3D globe-first interface.
-- Support both prompt input and direct globe exploration as equal interaction modes.
-- Use a hybrid worldwide coverage model: curated candidate database plus limited local grid scans.
-- Support both planning and near-term execution workflows.
-- Score by moon, weather, dark-sky quality, night window, Milky Way bonus, risk, and confidence.
-- Defer detailed visual design until after product structure and recommendation behavior are specified.
+고정 테스트 장소와 날짜를 사용해 다음을 증명한다.
+
+- 더 좋은 달 조건은 랭킹을 올린다.
+- 구름 또는 강수 조건이 나쁘면 랭킹이 내려간다.
+- 다른 조건이 비슷하면 더 어두운 장소가 광공해가 심한 장소보다 높게 랭킹된다.
+- 예보 기반 추천과 기후 기반 추천 사이에서 신뢰도가 올바르게 바뀐다.
+
+### UI 상태 테스트
+
+프롬프트 입력, 지구 선택, 날짜 스크러빙, 레이어 토글이 같은 추천 상태를 갱신하는지 검증한다.
+
+### 제공자 테스트
+
+날씨, 지오코딩, 광공해 제공자를 모의 처리해 재시도, 캐싱, API 실패, 오래된 데이터, 대체 경로를 테스트한다.
+
+## MVP 제외 범위
+
+- 최종 비주얼 디자인 시스템.
+- 네이티브 모바일 앱.
+- 사용자 계정.
+- 여행 일정 예약.
+- 소셜 공유.
+- 고급 이동 경로 계획.
+- 구름 없는 날씨에 대한 보장.
+
+## 구현 계획에서 결정할 사항
+
+다음 항목은 구현 계획 단계에서 결정한다.
+
+- 정확한 프론트엔드 프레임워크.
+- 정확한 천문 계산 라이브러리.
+- 날씨와 기후 데이터 제공자.
+- 초기 후보지 데이터셋 형식.
+- 첫 빌드가 백엔드 API, 서버리스 함수, 로컬 프로토타입 API 중 무엇을 사용할지.
+
+## 승인된 결정
+
+- 3D 지구 우선 인터페이스를 사용한다.
+- 프롬프트 입력과 직접 지구 탐색을 동등한 입력 방식으로 지원한다.
+- 전 세계 범위는 후보지 데이터베이스와 제한적 로컬 격자 스캔을 결합해 구현한다.
+- 계획 단계와 가까운 날짜의 실행 단계 모두를 지원한다.
+- 달, 날씨, 어두운 하늘 품질, 밤 시간, 은하수 보너스, 리스크, 신뢰도로 점수를 계산한다.
+- 상세 비주얼 디자인은 제품 구조와 추천 동작을 먼저 명세한 뒤 나중에 결정한다.
