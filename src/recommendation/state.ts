@@ -1,6 +1,7 @@
 import { create } from "zustand";
+import type { LayerKey } from "@/recommendation/types";
 
-export type LayerKey = "moon" | "weather" | "darkSky";
+export type { LayerKey } from "@/recommendation/types";
 
 type RecommendationWorkspaceState = {
   prompt: string;

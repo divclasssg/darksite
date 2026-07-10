@@ -85,8 +85,6 @@
 
 ## 진행 중
 
-- 없음
-
 ## 다음 작업
 
 - [ ] 도메인 타입 작성
@@ -98,6 +96,7 @@
   - `ScoreBreakdown`
   - `RecommendationResult`
   - `RecommendationState`
+  - 커밋: `e2280d0`
 
 - [ ] 뉴질랜드 2026년 4월 fixture 작성
   - 후보지
