@@ -83,11 +83,7 @@
   - 3D 지구 자동 회전과 드래그 회전 추가
   - 검증: `npm test`, `npm run build`, `npm audit --audit-level=moderate`, desktop/mobile browser check
 
-## 진행 중
-
-## 다음 작업
-
-- [ ] 도메인 타입 작성
+- [x] 추천 도메인 타입 작성
   - `GeoPoint`
   - `DateRange`
   - `RecommendationRequest`
@@ -96,7 +92,15 @@
   - `ScoreBreakdown`
   - `RecommendationResult`
   - `RecommendationState`
-  - 커밋: `e2280d0`
+  - `LayerKey`는 `src/recommendation/types.ts`에서 단일 정의하고 `src/recommendation/state.ts`에서 import/re-export
+  - 검증: `npx vitest run src/tests/recommendation-types.test.ts`, `npx tsc --noEmit`, `npm test`
+  - 커밋: `61e7694`
+
+## 진행 중
+
+- 없음
+
+## 다음 작업
 
 - [ ] 뉴질랜드 2026년 4월 fixture 작성
   - 후보지
