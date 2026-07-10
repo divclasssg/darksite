@@ -73,18 +73,21 @@
   - `postcss` 보안 경고는 npm `overrides`로 `8.5.10+` 적용
   - 검증: `npm test`, `npm run build`, `npm audit --audit-level=moderate`
 
-## 진행 중
-
-- 없음
-
-## 다음 작업
-
-- [ ] 기본 원페이지 골격 구현
+- [x] 기본 원페이지 골격 구현
   - 3D 지구 영역
   - 프롬프트 입력
   - 추천 패널 자리
   - 날짜 스크러버 자리
   - 레이어 컨트롤 자리
+  - Zustand 기반 원페이지 workspace 상태 추가
+  - 3D 지구 자동 회전과 드래그 회전 추가
+  - 검증: `npm test`, `npm run build`, `npm audit --audit-level=moderate`, desktop/mobile browser check
+
+## 진행 중
+
+- 없음
+
+## 다음 작업
 
 - [ ] 도메인 타입 작성
   - `GeoPoint`

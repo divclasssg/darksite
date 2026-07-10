@@ -1,0 +1,47 @@
+.prompt-bar {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.prompt-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.65rem;
+}
+
+.prompt-input,
+.prompt-submit {
+  border: 1px solid var(--color-line);
+  border-radius: 0.5rem;
+}
+
+.prompt-input {
+  min-width: 0;
+  padding: 0.95rem 1rem;
+  background: rgba(2, 6, 23, 0.72);
+  color: var(--color-text);
+  outline: none;
+}
+
+.prompt-input:focus {
+  border-color: var(--color-cyan);
+  box-shadow: 0 0 0 3px rgba(94, 234, 212, 0.16);
+}
+
+.prompt-submit {
+  cursor: pointer;
+  padding: 0 1.15rem;
+  background: rgba(94, 234, 212, 0.12);
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+@media (max-width: 860px) {
+  .prompt-row {
+    grid-template-columns: 1fr;
+  }
+
+  .prompt-submit {
+    min-height: 3rem;
+  }
+}

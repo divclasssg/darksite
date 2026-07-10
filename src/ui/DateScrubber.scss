@@ -1,0 +1,28 @@
+.date-scrubber {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.date-scrubber-header,
+.date-scrubber-scale {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.date-scrubber-value {
+  color: var(--color-lime);
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.date-scrubber-input {
+  width: 100%;
+  accent-color: var(--color-lime);
+}
+
+.date-scrubber-scale {
+  color: var(--color-muted);
+  font-size: 0.78rem;
+}
