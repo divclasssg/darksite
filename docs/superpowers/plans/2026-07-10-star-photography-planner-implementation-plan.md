@@ -39,7 +39,7 @@ Darksite 1차 구현의 목표는 전 세계 전체 기능을 한 번에 완성�
 
 이 조합은 초기 MVP를 빠르게 만들 수 있으면서, 이후 실제 날씨/지오코딩 API 키 보호, 서버 측 캐싱, Vercel 배포, 서버리스 Route Handler 확장까지 자연스럽게 이어진다.
 
-3D 지구는 브라우저 전용 기능이므로 Next.js App Router 안에서 client component로 분리한다. 실제 데이터 연동 전까지는 로컬 fixture를 사용하되, 제공자 계층은 나중에 Route Handler로 옮길 수 있게 순수 함수와 인터페이스 중심으로 작성한다.
+3D 지구는 브라우저 전용 기능이므로 Next.js App Router 안에서 client component로 분리한다. 1차 구현의 추천 흐름은 client fixture를 먼저 사용한다. Route Handler는 실제 API 키와 서버 캐시가 필요한 단계에 대비해 폴더 구조만 준비하고, 추천 계산은 순수 함수와 인터페이스 중심으로 작성해 나중에 서버 경계로 옮길 수 있게 한다.
 
 ## 구현 단계
 
@@ -345,7 +345,7 @@ src/
     globals.scss
     api/
       recommendations/
-        route.ts
+        .gitkeep
   globe/
     GlobeCanvas.tsx
     GlobeCanvas.scss
@@ -378,7 +378,7 @@ src/
     parsePrompt.test.ts
 ```
 
-1차 구현에서는 `api/recommendations/route.ts`가 fixture 기반 추천 결과를 반환하거나, 클라이언트에서 동일한 순수 함수를 직접 호출할 수 있다. 실제 API 키가 필요한 제공자를 붙이는 시점에는 Route Handler를 서버 측 경계로 사용한다.
+1차 구현에서는 클라이언트가 fixture와 순수 추천 함수를 직접 import해 사용한다. `api/recommendations/` 폴더는 Route Handler를 위한 자리만 준비하고, 실제 API 키가 필요한 제공자를 붙이는 시점에 `route.ts`를 추가해 서버 측 경계로 사용한다.
 
 구현 중 구조가 커지면 모듈을 나눌 수 있지만, 1차 구현은 이 정도의 경계로 충분하다.
 

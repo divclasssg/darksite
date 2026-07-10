@@ -45,6 +45,12 @@
 - [x] 작업 체크리스트 운영 체계 추가
   - 문서: `docs/superpowers/checklists/work-tracker.md`
 
+- [x] 1차 상태/데이터 흐름 결정
+  - 상태 관리는 Zustand 유지
+  - 추천 데이터는 client fixture 먼저 사용
+  - Route Handler는 구조만 준비하고 실제 API 연동 시 구현
+  - 준비된 자리: `src/app/api/recommendations/.gitkeep`
+
 ## 진행 중
 
 - 없음
@@ -55,6 +61,7 @@
   - `src/app/layout.tsx`
   - `src/app/page.tsx`
   - `src/app/globals.scss`
+  - `src/app/api/recommendations/.gitkeep`
   - 기본 `package.json`, `tsconfig.json`, `next.config.ts`
 
 - [ ] 필수 패키지 설치
@@ -121,8 +128,6 @@
 ## 결정 필요
 
 - [ ] 천문 계산 라이브러리 선택
-- [ ] Zustand를 유지할지, Jotai/Context 등 다른 상태 관리 후보를 재검토할지 결정
-- [ ] 첫 구현에서 Route Handler를 바로 둘지, 순수 함수 기반 client fixture로 먼저 갈지 결정
 
 ## 참고 문서
 
