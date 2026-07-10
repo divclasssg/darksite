@@ -29,16 +29,17 @@
 
 초기 구현은 다음 조합을 권장한다.
 
-- 앱: Vite + React + TypeScript
+- 앱: Next.js + React + TypeScript
+- 배포: Vercel
 - 3D: Three.js + React Three Fiber
 - 상태: Zustand
 - 테스트: Vitest + Testing Library
 - 스타일: CSS Modules
 - 데이터: 로컬 TypeScript fixture
 
-이 조합은 빠르게 프로토타입을 만들 수 있고, 3D 지구와 일반 UI를 같은 React 상태 위에서 연결하기 쉽다.
+이 조합은 초기 MVP를 빠르게 만들 수 있으면서, 이후 실제 날씨/지오코딩 API 키 보호, 서버 측 캐싱, Vercel 배포, 서버리스 Route Handler 확장까지 자연스럽게 이어진다.
 
-Next.js는 첫 MVP에는 사용하지 않는다. 서버 렌더링, 라우팅, API Route가 필요해지는 시점에 도입을 다시 검토한다.
+3D 지구는 브라우저 전용 기능이므로 Next.js App Router 안에서 client component로 분리한다. 실제 데이터 연동 전까지는 로컬 fixture를 사용하되, 제공자 계층은 나중에 Route Handler로 옮길 수 있게 순수 함수와 인터페이스 중심으로 작성한다.
 
 ## 구현 단계
 
@@ -46,15 +47,16 @@ Next.js는 첫 MVP에는 사용하지 않는다. 서버 렌더링, 라우팅, AP
 
 목표:
 
-- React + TypeScript 앱을 생성한다.
+- Next.js + React + TypeScript 앱을 생성한다.
 - 기본 테스트 환경을 만든다.
 - 3D 렌더링에 필요한 의존성을 설치한다.
 
 작업:
 
-- `package.json`, `vite.config.ts`, `tsconfig.json`을 만든다.
-- 기본 앱 엔트리와 스타일 파일을 만든다.
+- `package.json`, `next.config.ts`, `tsconfig.json`을 만든다.
+- App Router 기반의 `src/app/page.tsx`, `src/app/layout.tsx`, 전역 스타일 파일을 만든다.
 - Vitest 설정을 추가한다.
+- 3D 지구 컴포넌트는 `use client`가 붙은 client component로 분리한다.
 - 앱이 빈 화면이 아니라 첫 번째 레이아웃 골격을 렌더링하게 한다.
 
 완료 기준:
@@ -338,8 +340,12 @@ fixture 중 달과 밤 시간 조건을 실제 계산 로직으로 대체한다.
 ```text
 src/
   app/
-    App.tsx
-    App.css
+    layout.tsx
+    page.tsx
+    globals.css
+    api/
+      recommendations/
+        route.ts
   globe/
     GlobeCanvas.tsx
     GlobePin.tsx
@@ -360,10 +366,14 @@ src/
     astronomy.ts
     weatherFixture.ts
     lightPollutionFixture.ts
+  server/
+    recommendationService.ts
   tests/
     scoring.test.ts
     parsePrompt.test.ts
 ```
+
+1차 구현에서는 `api/recommendations/route.ts`가 fixture 기반 추천 결과를 반환하거나, 클라이언트에서 동일한 순수 함수를 직접 호출할 수 있다. 실제 API 키가 필요한 제공자를 붙이는 시점에는 Route Handler를 서버 측 경계로 사용한다.
 
 구현 중 구조가 커지면 모듈을 나눌 수 있지만, 1차 구현은 이 정도의 경계로 충분하다.
 
