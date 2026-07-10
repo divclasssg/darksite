@@ -34,7 +34,7 @@
 - 3D: Three.js + React Three Fiber
 - 상태: Zustand
 - 테스트: Vitest + Testing Library
-- 스타일: CSS Modules
+- 스타일: SCSS
 - 데이터: 로컬 TypeScript fixture
 
 이 조합은 초기 MVP를 빠르게 만들 수 있으면서, 이후 실제 날씨/지오코딩 API 키 보호, 서버 측 캐싱, Vercel 배포, 서버리스 Route Handler 확장까지 자연스럽게 이어진다.
@@ -54,7 +54,7 @@
 작업:
 
 - `package.json`, `next.config.ts`, `tsconfig.json`을 만든다.
-- App Router 기반의 `src/app/page.tsx`, `src/app/layout.tsx`, 전역 스타일 파일을 만든다.
+- App Router 기반의 `src/app/page.tsx`, `src/app/layout.tsx`, 전역 SCSS 파일을 만든다.
 - Vitest 설정을 추가한다.
 - 3D 지구 컴포넌트는 `use client`가 붙은 client component로 분리한다.
 - 앱이 빈 화면이 아니라 첫 번째 레이아웃 골격을 렌더링하게 한다.
@@ -342,12 +342,13 @@ src/
   app/
     layout.tsx
     page.tsx
-    globals.css
+    globals.scss
     api/
       recommendations/
         route.ts
   globe/
     GlobeCanvas.tsx
+    GlobeCanvas.scss
     GlobePin.tsx
     globeMath.ts
   recommendation/
@@ -359,9 +360,13 @@ src/
     state.ts
   ui/
     PromptBar.tsx
+    PromptBar.scss
     RecommendationPanel.tsx
+    RecommendationPanel.scss
     DateScrubber.tsx
+    DateScrubber.scss
     LayerControls.tsx
+    LayerControls.scss
   providers/
     astronomy.ts
     weatherFixture.ts
@@ -376,6 +381,29 @@ src/
 1차 구현에서는 `api/recommendations/route.ts`가 fixture 기반 추천 결과를 반환하거나, 클라이언트에서 동일한 순수 함수를 직접 호출할 수 있다. 실제 API 키가 필요한 제공자를 붙이는 시점에는 Route Handler를 서버 측 경계로 사용한다.
 
 구현 중 구조가 커지면 모듈을 나눌 수 있지만, 1차 구현은 이 정도의 경계로 충분하다.
+
+## 스타일 규칙
+
+스타일은 SCSS를 사용한다. 전역 토큰과 리셋은 `src/app/globals.scss`에 두고, 컴포넌트별 스타일은 컴포넌트 파일 옆에 같은 이름의 `.scss` 파일로 둔다.
+
+클래스명은 BEM 방식이 아니라 하이픈 기반 이름을 사용한다.
+
+사용할 방식:
+
+- `prompt-bar`
+- `prompt-input`
+- `recommendation-panel`
+- `score-row`
+- `date-scrubber`
+- `layer-control-active`
+
+사용하지 않을 방식:
+
+- `prompt-bar__input`
+- `recommendation-panel__score-row`
+- `layer-control--active`
+
+상태나 변형은 `is-active`, `is-loading`, `has-warning`처럼 읽히는 하이픈 클래스로 표현한다. 한 컴포넌트 안에서만 쓰이는 스타일이어도 클래스명은 화면에서 의미가 드러나게 작성한다.
 
 ## 첫 번째 PR 또는 커밋 묶음 제안
 
