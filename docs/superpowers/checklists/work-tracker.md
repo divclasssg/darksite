@@ -51,20 +51,15 @@
   - Route Handler는 구조만 준비하고 실제 API 연동 시 구현
   - 준비된 자리: `src/app/api/recommendations/.gitkeep`
 
-## 진행 중
-
-- 없음
-
-## 다음 작업
-
-- [ ] Next.js 프로젝트 스캐폴딩
+- [x] Next.js 프로젝트 스캐폴딩
   - `src/app/layout.tsx`
   - `src/app/page.tsx`
   - `src/app/globals.scss`
   - `src/app/api/recommendations/.gitkeep`
   - 기본 `package.json`, `tsconfig.json`, `next.config.ts`
+  - `GlobeCanvas` client component placeholder 추가
 
-- [ ] 필수 패키지 설치
+- [x] 필수 패키지 설치
   - Next.js
   - React
   - TypeScript
@@ -74,6 +69,15 @@
   - Zustand
   - Vitest
   - Testing Library
+  - TypeScript는 Next.js 호환을 위해 `5.9.3` 라인으로 고정
+  - `postcss` 보안 경고는 npm `overrides`로 `8.5.10+` 적용
+  - 검증: `npm test`, `npm run build`, `npm audit --audit-level=moderate`
+
+## 진행 중
+
+- 없음
+
+## 다음 작업
 
 - [ ] 기본 원페이지 골격 구현
   - 3D 지구 영역
